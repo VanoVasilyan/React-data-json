@@ -1,26 +1,52 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component{
+  constructor(){
+    super()
+    this.state = {
+      items: []
+    }
+  }
+
+
+  componentDidMount(){
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(el => {
+      return el.json()
+    })
+    .then(e=>{
+      this.setState(
+        {items:e}
+      )
+    })
+  }
+
+  reverseItems = () =>{
+    this.setState({
+      items:this.state.items.reverse()
+    })
+}
+
+  render(){
+    return (
+      <>
+      <div className="App">
+        {this.state.items.map(el => {
+          return (
+            <div key={el.id}>
+              <p>{'Name: '  + el.name}</p> 
+              <p>{'Email: ' + el.email}</p> 
+              <p>{'Phone: ' + el.phone}</p> 
+            </div>
+          )
+        })}
+      </div>
+       <button className="button" onClick={this.reverseItems}>Click to Reverse</button>
+       </>
+    );
+  }
+  
 }
 
 export default App;
